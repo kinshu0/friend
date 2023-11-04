@@ -1,12 +1,13 @@
 from flask import Flask, request
 import openai
 import dotenv
+import os
 
 app = Flask(__name__)
 
 # set open ai key from dotenv
 dotenv.load_dotenv()
-openai.api_key = dotenv.get('OPENAI_API_KEY')
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 characters = {
     'jack sparrow': {
@@ -34,11 +35,12 @@ def create_character(name):
     return 'Character created!'
 
 
-@app.route('/list_characters')
+@app.route('/characters', methods=['GET'])
 def list_characters():
     return characters
 
-@app.route('/talk', method='POST')
+
+@app.route('/talk', methods=['POST'])
 def talk():
     message = request.json.get('message')
     character_name = request.json.get('character_name')
