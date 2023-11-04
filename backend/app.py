@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import openai
 import dotenv
 import os
@@ -40,6 +40,13 @@ def list_characters():
     return characters
 
 
+"""
+POST /talk
+{
+    "message": "Hello, how are you?",
+    "character_name": "jack sparrow"
+}`
+"""
 @app.route('/talk', methods=['POST'])
 def talk():
     message = request.json.get('message')
@@ -57,15 +64,18 @@ def talk():
     all_messages = [{'role': role, 'content': content} for role, content in characters[character_name]['chat_history']]
     all_messages.append({'role': 'user', 'content': message})
 
-    completion = openai.Completion.create(
+    completion = openai.ChatCompletion.create(
         model='gpt-3.5-turbo',
-        prompt=all_messages,
+        messages=all_messages,
     )
 
-    completion_text = completion.choices[0].text
+    completion_text = completion['choices'][0]['message']['content']
 
     characters[character_name]['chat_history'].append(('user', message))
     characters[character_name]['chat_history'].append(('assistant', completion_text))
 
-    return {'response': completion_text}
+    return {'message': completion_text}
 
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=8000)
