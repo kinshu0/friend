@@ -80,7 +80,7 @@ const App = () => {
 
       <Textbox className="center-text" setText={setText} text={text} />
       <button onClick={() => talk(text,selectedCharacter)}>Talk</button>
-      <Dictaphone record={record} setListening={setListening} setResponses={setResponses}/>
+      <Dictaphone record={record} setListening={setListening} setResponses={setResponses} selectedCharacter={selectedCharacter}/>
       <button type="button" className="btn btn-secondary" onClick={() => setRecord(!record)}>
           
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill={listening ? "red" : 'currentColor'} className="bi bi-mic" viewBox="0 0 16 16">

@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
-const Dictaphone = ({record,setListening,setResponses}) => {
+const Dictaphone = ({record,setListening,setResponses,selectedCharacter}) => {
   const {
     transcript,
     listening,
@@ -12,8 +12,6 @@ const Dictaphone = ({record,setListening,setResponses}) => {
 
 
   
-
- 
 
   useEffect(() => {
     setListening(listening)
@@ -38,7 +36,7 @@ const Dictaphone = ({record,setListening,setResponses}) => {
     }else{
       SpeechRecognition.stopListening()
       if(transcript){
-        sendTranscriptToApi(transcript,'harsh gandhi');
+        sendTranscriptToApi(transcript,selectedCharacter);
       }
       resetTranscript()
       
