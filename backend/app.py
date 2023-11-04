@@ -1,58 +1,69 @@
-from flask import Flask, jsonify, request
-from flask_restful import Api, Resource
-import requests
+from flask import Flask, request
+import openai
+import dotenv
 
 app = Flask(__name__)
-api = Api(app)
 
-# Assuming we use an in-memory structure to store data since it's a hackathon MVP.
-characters = {}
-conversations = {}
+# set open ai key from dotenv
+dotenv.load_dotenv()
+openai.api_key = dotenv.get('OPENAI_API_KEY')
 
-# LLM API information (you would replace the URL and headers with your specific API info)
-LLM_API_URL = 'https://your.llm.api.endpoint'
-LLM_API_KEY = 'your_api_key_here'
+characters = {
+    'jack sparrow': {
+        'chat_history': [],
+        'description': 'Captain of the Black Pearl',
+    },
+    'harsh gandhi': {
+        'chat_history': [],
+        'description': 'A dumb guy',
+    },
+}
 
-class CreateCharacter(Resource):
-    def post(self):
-        data = request.get_json()
-        character_id = len(characters) + 1
-        characters[character_id] = {
-            'name': data.get('name'),
-            'description': data.get('description'),
-            'style_of_speech': data.get('style_of_speech')
-        }
-        return jsonify({'id': character_id, 'character': characters[character_id]})
 
-class ListCharacters(Resource):
-    def get(self):
-        return jsonify(characters)
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
 
-class SendMessage(Resource):
-    def post(self, character_id):
-        message = request.get_json().get('message')
-        character = characters.get(character_id)
 
-        # Here you would implement logic to send data to your LLM API and receive the response.
-        # For now, let's mock this with a simple echo response.
-        response = f"Echo from {character['name']}: {message}"
+@app.route('/create_character/<name>')
+def create_character(name):
+    characters[name] = {
+        'chat_history': [],
+        'description': 'A dumb guy',
+    }
+    return 'Character created!'
 
-        # Storing the conversation
-        if character_id not in conversations:
-            conversations[character_id] = []
-        conversations[character_id].append({'message': message, 'response': response})
 
-        return jsonify({'response': response})
+@app.route('/list_characters')
+def list_characters():
+    return characters
 
-class GetConversations(Resource):
-    def get(self, character_id):
-        return jsonify(conversations.get(character_id, []))
+@app.route('/talk', method='POST')
+def talk():
+    message = request.json.get('message')
+    character_name = request.json.get('character_name')
 
-# Setting up the API resource routing
-api.add_resource(CreateCharacter, '/create_character')
-api.add_resource(ListCharacters, '/list_characters')
-api.add_resource(SendMessage, '/send_message/<int:character_id>')
-api.add_resource(GetConversations, '/get_conversations/<int:character_id>')
+    if not message:
+        return {'error': 'Message is required'}, 400
+    
+    if not character_name:
+        return {'error': 'Character name is required'}, 400
+    
+    if character_name not in characters:
+        return {'error': 'Character not found'}, 404
+    
+    all_messages = [{'role': role, 'content': content} for role, content in characters[character_name]['chat_history']]
+    all_messages.append({'role': 'user', 'content': message})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    completion = openai.Completion.create(
+        model='gpt-3.5-turbo',
+        prompt=all_messages,
+    )
+
+    completion_text = completion.choices[0].text
+
+    characters[character_name]['chat_history'].append(('user', message))
+    characters[character_name]['chat_history'].append(('assistant', completion_text))
+
+    return {'response': completion_text}
+
