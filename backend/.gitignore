@@ -24,4 +24,5 @@ htmlcov/
 .coverage.*
 *,cover
 
+.env
 node_modules
