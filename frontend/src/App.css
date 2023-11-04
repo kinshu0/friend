@@ -1,19 +1,41 @@
-.App {
+body {
+    background-color: silver;
+    margin: 0;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
+    height: 100vh;
   }
   
   .image-container {
-    width: 120%;
     text-align: center;
     position: relative;
-    bottom: 70px;
-    left: 60%;
+    margin-bottom: 20px;
+  }
+  
+  h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #007BFF;
+    font-family: 'Arial', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   }
   
   img {
     width: 100%;
     display: block;
   }
-    
+  
+  Textbox {
+    max-width: 600px;
+    width: 90%;
+    padding: 10px;
+    border: 2px solid #007BFF;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
