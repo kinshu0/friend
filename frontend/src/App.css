@@ -8,6 +8,9 @@ body {
     height: 100vh;
   }
 
+  .App{
+    max-width: 600px;
+  }
   .App canvas{
     height:100px;
     width:100px;
