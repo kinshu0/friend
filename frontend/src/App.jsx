@@ -15,7 +15,7 @@ const App = () => {
         <img src="src/assets/teacher.jpg" alt="Teacher" />
       </div>
       <Textbox className = "center-text" />
-      {/* <AudioRecord /> */}
+     
       <Dictaphone record={record}/>
       <button type="button" className="btn btn-secondary" onClick={() => setRecord(!record)}>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-mic" viewBox="0 0 16 16">

@@ -38,8 +38,8 @@ const Dictaphone = ({record}) => {
   continuous: true,
 })}>Start</button> */}
       {/* <button onClick={SpeechRecognition.stopListening}>Stop</button> */}
-      <button onClick={resetTranscript}>Reset</button>
-      <p>{transcript}</p>
+      {/* <button onClick={resetTranscript}>Reset</button> */}
+      <p style={{maxWidth:'400px'}}>{transcript}</p>
     </div>
   );
 };
