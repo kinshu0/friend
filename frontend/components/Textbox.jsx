@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
-
+import Form from 'react-bootstrap/Form';
 
 function Textbox() {
-  const [text, setText] = useState('');
 
-  const handleChange = (e) => {
-    setText(e.target.value);
-  };
 
   return (
-    <input
-      type="text"
-      value={text}
-      onChange={handleChange}
-      placeholder="Enter..."
-    />
+    <Form>
+      
+      <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Control as="textarea" rows={3} placeholder ="Enter.." />
+      </Form.Group>
+    </Form>
   );
 }
 
