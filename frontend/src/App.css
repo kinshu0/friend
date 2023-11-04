@@ -29,13 +29,3 @@ body {
     width: 100%;
     display: block;
   }
-  
-  Textbox {
-    max-width: 600px;
-    width: 90%;
-    padding: 10px;
-    border: 2px solid #007BFF;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
