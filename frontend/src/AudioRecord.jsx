@@ -19,6 +19,8 @@ function AudioRecord() {
     console.log("record on data")
     console.log({recordedData})
     setAudioData(recordedData);
+  //   const audioBlob = new Blob([recordedData], { type: 'audio/wav' }); // You can adjust the type according to your audio format
+  // setAudioData(audioBlob);
   };
 
   const onStop = () => {
@@ -36,17 +38,37 @@ function AudioRecord() {
     }
   };
 
+  const handleUpload = () => {
+    if (audioData) {
+      const formData = new FormData();
+      formData.append('audio', audioData);
+
+      fetch('http://localhost:3001/upload-audio', {
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Audio uploaded:', data);
+        })
+        .catch((error) => {
+          console.error('Error uploading audio:', error);
+        });
+    }
+  };
+
+
+  
   return (
     <div>
       <button onClick={startRecording}>Start Recording</button>
       <button onClick={stopRecording}>Stop Recording</button>
-      <button onClick={sendAudioToBackend}>Send to Backend</button>
+      <button onClick={handleUpload}>Send to Backend</button>
       <ReactMic
         record={isRecording}
         className="sound-wave"
         onStop={onStop}
         onData={onData}
-        mimeType="audio/mp3"
       />
     </div>
   );
