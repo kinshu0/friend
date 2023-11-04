@@ -57,7 +57,8 @@ const App = () => {
     <div className="App">
       <div className="image-container">
         <h1>Buddy.ai</h1>
-        <img src="src/assets/teacher.jpg" alt="Teacher" />
+        {/* <img src="src/assets/teacher.jpg" alt="Teacher" /> */}
+        <img src={`src/assets/${selectedCharacter}.jpg`} alt="Teacher" />
       </div>
       <select
   className="character-dropdown"
